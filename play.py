@@ -1,6 +1,8 @@
+from time import *
+
 import pygame
 
-tile=16
+tile=64
 LONG,LARG=tile*8,tile*8
 
 pygame.init()
@@ -40,15 +42,24 @@ def map():
     for y in range(8):
         for x in range(8):
             if table[y*8+x] != 0:
-                fenetre.blit(lst[table[y*8+x]],(x*16,y*16))
+                fenetre.blit(lst[table[y*8+x]],(x*tile,y*tile))
 
 loop=True
+pion=0
+
 while loop==True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             loop = False            #fermeture de la fenetre (croix rouge)
         pos_x,pos_y=pygame.mouse.get_pos()
-        fenetre.blit(lst[1],(int(pos_x/tile)*tile,int(pos_y/tile)*tile))
+        if pygame.mouse.get_pressed()[0]:
+            pion=table[pos_x//tile+pos_y//tile*8]
+            table[pos_x//tile+pos_y//tile*8]=0
+        elif pygame.mouse.get_pressed()[2]:
+            if table[pos_x//tile+pos_y//tile*8] != 0 and table[pos_x//tile+pos_y//tile*8] < 10:
+                pass
+            elif table[pos_x//tile+pos_y//tile*8] == 0 or table[pos_x//tile+pos_y//tile*8] > 10:
+                table[pos_x//tile+pos_y//tile*8]=pion       
         map()
 
     # Actualisation de l'affichage
