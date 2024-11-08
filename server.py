@@ -1,5 +1,3 @@
-from time import *
-
 import socket
 
 #configurer le serveur
@@ -21,9 +19,11 @@ def server_start():
         server.listen()
         conn,addr = server.accept()
         print(f"Connection établie avec {addr}")
-        conn.send('Can send'.encode('utf-8'))
+        
+        conn.send('sd'.encode('utf-8'))
         data = conn.recv(1024).decode()
         print(data)
+        
         conn.close()
     print('Server shutdown')
     server.close()
