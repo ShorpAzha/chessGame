@@ -1,7 +1,7 @@
 # A sample Chess game
 ## Developped by:
-* _ShorpAzha_ (programming)
-* _Flond3_ (spriting)
+* [https://github.com/ShorpAzha](_ShorpAzha_ (programming))
+* [https://github.com/Flond3](_Flond3_ (spriting))
 ## How to play
 With left click you put the pion in your hand, with your right click, you put the pion on the plane.
 ## News features will come
