@@ -8,8 +8,5 @@ With left click you put the pion in your hand, with your right click, you put th
 - [x] All pions have a circle for show how to put the pion in the plane
 - [ ] Put the dead pions in the left or right of the plane
 - [ ] Multiplayer in local
-- [x] A logic for win (or lose like me) the game lol
+- [ ] A logic for win (or lose like me) the game lol
 (Yes I've make it but I'm not a good chess player -_-)
-## One bug sry it's WIP
-![alt text](MyBug.png)
-> Sniff

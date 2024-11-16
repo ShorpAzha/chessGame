@@ -39,7 +39,7 @@ blanc_cavalier_curseur=pygame.image.load('textures/blanc-cavalier-curseur.png')
 blanc_fou_curseur=pygame.image.load('textures/blanc-fou-curseur.png')
 blanc_dame_curseur=pygame.image.load('textures/blanc-dame-curseur.png')
 blanc_roi_curseur=pygame.image.load('textures/blanc-roi-curseur.png')
-noir_pion_curseur=pygame.image.load('textures/noir-poin-curseur.png')
+noir_pion_curseur=pygame.image.load('textures/noir-pion-curseur.png')
 noir_tour_curseur=pygame.image.load('textures/noir-tour-curseur.png')
 noir_cavalier_curseur=pygame.image.load('textures/noir-cavalier-curseur.png')
 noir_fou_curseur=pygame.image.load('textures/noir-fou-curseur.png')
@@ -182,6 +182,7 @@ def whereCanMove(nb,pos_x,pos_y):
         while pa_x != coli[1][0]+1:
             lines.append((pa_x,pa_y))
             pa_x,pa_y=pa_x+1,pa_y+1
+        lines.append((-1,-1))
         while pb_x != coli[3][0]+1:
             lines.append((pb_x,pb_y))
             pb_x,pb_y=pb_x+1,pb_y-1
@@ -204,12 +205,16 @@ def whereCanMove(nb,pos_x,pos_y):
         if not(ma[1] != None): mb.pop(1); mb.insert(1,(coli[1][0],coli[1][1],0))
         if not(ma[2] != None): mb.pop(2); mb.insert(2,(coli[2][0],coli[2][1],0))
         if not(ma[3] != None): mb.pop(3); mb.insert(3,(coli[3][0],coli[3][1],0))
+        print(mb)
+        bug=False
         for i in range(len(lines)):
             (x,y)=lines[i]
-            if x != pos_x and y != pos_y:
-                if mb[0][0] <= x <= mb[1][0] and mb[0][1] <= y <= mb[1][1]:
+            if x < 0 and y < 0:
+                bug=True
+            elif x != pos_x and y != pos_y:
+                if mb[0][0] <= x <= mb[1][0] and mb[0][1] <= y <= mb[1][1] and bug == False:
                     possibility.append((x,y))
-                elif mb[2][0] <= x <= mb[3][0] and mb[2][1] >= y >= mb[3][1]:
+                elif mb[2][0] <= x <= mb[3][0] and mb[2][1] >= y >= mb[3][1] and bug == True:
                     possibility.append((x,y))
     elif nb == 5 or nb == 15:
         lines=[]
@@ -233,6 +238,7 @@ def whereCanMove(nb,pos_x,pos_y):
         while pa_x != coli[1][0]+1:
             lines.append((pa_x,pa_y))
             pa_x,pa_y=pa_x+1,pa_y+1
+        lines.append((-1,-1))
         while pb_x != coli[3][0]+1:
             lines.append((pb_x,pb_y))
             pb_x,pb_y=pb_x+1,pb_y-1
@@ -255,13 +261,18 @@ def whereCanMove(nb,pos_x,pos_y):
         if not(ma[1] != None): mb.pop(1); mb.insert(1,(coli[1][0],coli[1][1],0))
         if not(ma[2] != None): mb.pop(2); mb.insert(2,(coli[2][0],coli[2][1],0))
         if not(ma[3] != None): mb.pop(3); mb.insert(3,(coli[3][0],coli[3][1],0))
+        print(mb)
+        bug=False
         for i in range(len(lines)):
             (x,y)=lines[i]
-            if x != pos_x and y != pos_y:
-                if mb[0][0] <= x <= mb[1][0] and mb[0][1] <= y <= mb[1][1]:
+            if x < 0 and y < 0:
+                bug=True
+            elif x != pos_x and y != pos_y:
+                if mb[0][0] <= x <= mb[1][0] and mb[0][1] <= y <= mb[1][1] and bug == False:
                     possibility.append((x,y))
-                elif mb[2][0] <= x <= mb[3][0] and mb[2][1] >= y >= mb[3][1]:
+                elif mb[2][0] <= x <= mb[3][0] and mb[2][1] >= y >= mb[3][1] and bug == True:
                     possibility.append((x,y))
+        print(possibility)
         # la croix de l'angleterre
         coli=[(0,0),(7,0),(0,0),(0,7)]
         # colisions
