@@ -31,6 +31,8 @@ noir_fou=pygame.image.load('textures/noir-fou.png')
 noir_dame=pygame.image.load('textures/noir-dame.png')
 noir_roi=pygame.image.load('textures/noir-roi.png')
 
+duck_pion=pygame.image.load('textures/duck-duck-pion.png')
+
 # Curseurs
 curseur=pygame.image.load('textures/curseur.png')
 blanc_pion_curseur=pygame.image.load('textures/blanc-pion-curseur.png')
@@ -46,6 +48,8 @@ noir_fou_curseur=pygame.image.load('textures/noir-fou-curseur.png')
 noir_dame_curseur=pygame.image.load('textures/noir-dame-curseur.png')
 noir_roi_curseur=pygame.image.load('textures/noir-roi-curseur.png')
 
+duck_curseur=pygame.image.load('textures/duck-duck-pion-curseur.png')
+
 pos=pygame.image.load('textures/possibility.png')
 superpos=pygame.image.load('textures/superpos.png')
 
@@ -53,8 +57,8 @@ data_file='chess_table.csv'
 
 lst = {1:blanc_pion,2:blanc_tour,3:blanc_cavalier,4:blanc_fou,5:blanc_dame,6:blanc_roi,
        11:noir_pion,12:noir_tour,13:noir_cavalier,14:noir_fou,15:noir_dame,16:noir_roi,
-       21:pos,25:superpos,
-       100:curseur,
+       21:pos,22:duck_pion,25:superpos,
+       100:curseur,122:duck_curseur,
        101:blanc_pion_curseur,102:blanc_tour_curseur,103:blanc_cavalier_curseur,
        104:blanc_fou_curseur,105:blanc_dame_curseur,106:blanc_roi_curseur,
        111:noir_pion_curseur,112:noir_tour_curseur,113:noir_cavalier_curseur,
@@ -116,6 +120,13 @@ def sqt(posx,posy,x,y):
     return sqrt((posx-x)**2+(posy-y)**2)
 
 set_data(data_file,txt())
+
+def all_grid():
+    all_=[]
+    for x in range(8):
+        for y in range(8):
+            all_.append((x,y))
+    return all_
 
 def whereCanMove(nb,pos_x,pos_y):
     possibility=[(pos_x,pos_y)]
@@ -205,7 +216,6 @@ def whereCanMove(nb,pos_x,pos_y):
         if not(ma[1] != None): mb.pop(1); mb.insert(1,(coli[1][0],coli[1][1],0))
         if not(ma[2] != None): mb.pop(2); mb.insert(2,(coli[2][0],coli[2][1],0))
         if not(ma[3] != None): mb.pop(3); mb.insert(3,(coli[3][0],coli[3][1],0))
-        print(mb)
         bug=False
         for i in range(len(lines)):
             (x,y)=lines[i]
@@ -261,7 +271,6 @@ def whereCanMove(nb,pos_x,pos_y):
         if not(ma[1] != None): mb.pop(1); mb.insert(1,(coli[1][0],coli[1][1],0))
         if not(ma[2] != None): mb.pop(2); mb.insert(2,(coli[2][0],coli[2][1],0))
         if not(ma[3] != None): mb.pop(3); mb.insert(3,(coli[3][0],coli[3][1],0))
-        print(mb)
         bug=False
         for i in range(len(lines)):
             (x,y)=lines[i]
@@ -272,7 +281,6 @@ def whereCanMove(nb,pos_x,pos_y):
                     possibility.append((x,y))
                 elif mb[2][0] <= x <= mb[3][0] and mb[2][1] >= y >= mb[3][1] and bug == True:
                     possibility.append((x,y))
-        print(possibility)
         # la croix de l'angleterre
         coli=[(0,0),(7,0),(0,0),(0,7)]
         # colisions
@@ -331,19 +339,28 @@ while loop==True:
         cursor = lst[pion+100].convert_alpha()
         cursorr = pygame.cursors.Cursor((0,0), cursor)
         pygame.mouse.set_cursor(cursorr)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_INSERT: pion=22
         if pygame.mouse.get_pressed()[0] and 0 < pos_x < 8*tile and 0 < pos_y < 8*tile:
             if pion == 0 and table[pos_y//tile*8+pos_x//tile] != 0:
                 pion=table[pos_x//tile+pos_y//tile*8]
                 table[pos_x//tile+pos_y//tile*8]=0
-                oldx,oldy=pos_x//tile,pos_y//tile
-                set_data(data_file,txt())
-                lzt=whereCanMove(pion, pos_x//tile, pos_y//tile)
-                memx,memy=pos_x//tile,pos_y//tile
-                for i in range(len(lzt)):
-                    (x,y)=lzt[i]
-                    if table[x+y*8] == 0: table[x+y*8]=21
-                    elif pion < 10 and table[x+y*8] > 10: table[x+y*8]+=50
-                    elif pion > 10 and table[x+y*8] < 10: table[x+y*8]+=50
+                if pion == 22:
+                    set_data(data_file,txt())
+                    for x in range(8):
+                        for y in range(8):
+                            if table[x+y*8] == 0: table[x+y*8]=21
+                            else: table[x+y*8]+=50
+                else:
+                    oldx,oldy=pos_x//tile,pos_y//tile
+                    set_data(data_file,txt())
+                    lzt=whereCanMove(pion, pos_x//tile, pos_y//tile)
+                    memx,memy=pos_x//tile,pos_y//tile
+                    for i in range(len(lzt)):
+                        (x,y)=lzt[i]
+                        if table[x+y*8] == 0: table[x+y*8]=21
+                        elif pion < 10 and table[x+y*8] > 10: table[x+y*8]+=50
+                        elif pion > 10 and table[x+y*8] < 10: table[x+y*8]+=50
         elif pygame.mouse.get_pressed()[2] and 0 < pos_x < 8*tile and 0 < pos_y < 8*tile:
             if pion == 0:
                 pass
@@ -362,7 +379,7 @@ while loop==True:
                     if isPossible:
                         pion=0
                         if oldx != pos_x//tile and oldy != pos_y//tile: qt_pion+=1
-            elif pion > 10:
+            elif 20 > pion > 10:
                 if table[pos_x//tile+pos_y//tile*8] == 0 or table[pos_x//tile+pos_y//tile*8] < 10 or table[pos_x//tile+pos_y//tile*8] > 20:
                     #if pion == 11 or pion == 12 or pion == 13 or pion == 14 or pion == 16:
                     isPossible=False
@@ -377,6 +394,18 @@ while loop==True:
                     if isPossible:
                         pion=0
                         if oldx != pos_x//tile and oldy != pos_y//tile: qt_pion+=1
+            elif pion == 22:
+                isPossible=False
+                table=thisIsATable()
+                lzt=all_grid()
+                for i in range(len(lzt)):
+                    (x,y)=lzt[i]
+                    if pos_x//tile == x and pos_y//tile ==y:
+                        table[pos_x//tile+pos_y//tile*8]=pion
+                        isPossible=True
+                set_data(data_file,txt())
+                if isPossible:
+                    pion=0
             if qt_pion % 2 == 0:
                 texte = font.render(f'Au tour des Noirs', True, (255, 255, 255))
             else:
